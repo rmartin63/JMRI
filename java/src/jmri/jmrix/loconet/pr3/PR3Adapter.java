@@ -5,13 +5,8 @@ import jmri.jmrix.loconet.LocoNetSystemConnectionMemo;
 import jmri.jmrix.loconet.LnPacketizer;
 import jmri.jmrix.loconet.LocoNetMessage;
 import jmri.jmrix.loconet.locobuffer.LocoBufferAdapter;
-
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 import purejavacomm.SerialPort;
 import purejavacomm.UnsupportedCommOperationException;
 
@@ -22,35 +17,15 @@ import purejavacomm.UnsupportedCommOperationException;
  * @author Bob Jacobsen Copyright (C) 2004, 2005, 2006, 2008
   */
 public class PR3Adapter extends LocoBufferAdapter {
-    private static int count = 0;
-    private static ArrayList <PR3Adapter> adaptorList = new ArrayList <>();
- 
 
     public PR3Adapter() {
         super(new PR3SystemConnectionMemo());
 
-        adaptorList.add(this);
-        count++;
-        
         options.remove(option2Name);
         options.put(option2Name, new Option(Bundle.getMessage("CommandStationTypeLabel"), commandStationOptions(), false));
 
     }
 
-    public static PR3Adapter getInstance() {
-        if(adaptorList.get(0) != null) return adaptorList.get(0);
-        else return null;
-    }
-    
-    public static PR3Adapter getInstance(int ct) {
-        if(ct <= count) {
-            if(adaptorList.get(ct) != null) return adaptorList.get(ct);
-        } 
-        return null;
-    }
-
-    public static int getInstanceCount() { return count; }
-    
     /**
      * Sets up the serial port characteristics.  Always uses flow control, which is
      * not considered a user-settable option.  Sets the PR3 for the appropriate
