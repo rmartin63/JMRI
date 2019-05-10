@@ -546,7 +546,7 @@ public class Track {
 
     /**
      * The amount of consumed track space to be ignored when sending new rolling
-     * stock to the track.
+     * stock to the track.  See Planned Pickups in help.
      *
      * @param percentage a number between 0 and 100
      */
@@ -1539,9 +1539,17 @@ public class Track {
             }
             log.debug("Rolling stock ({}) not accepted at location ({}, {}) no room!", rs.toString(), getLocation()
                     .getName(), getName()); // NOI18N
+            // calculate the available space
+            int available = getLength() -
+                    (getUsedLength() * (100 - getIgnoreUsedLengthPercentage()) / 100 +
+                            getReserved());
+            // could be less based on track length
+            int available2 = getLength() - getReservedLengthDrops();
+            if (available2 < available) {
+                available = available2;
+            }
             return MessageFormat.format(Bundle.getMessage("lengthIssue"), new Object[]{LENGTH, length,
-                    Setup.getLengthUnit().toLowerCase(),
-                    getLength() - (getUsedLength() * (100 - getIgnoreUsedLengthPercentage()) / 100 + getReserved())});
+                    Setup.getLengthUnit().toLowerCase(), available});
         }
         return OKAY;
     }

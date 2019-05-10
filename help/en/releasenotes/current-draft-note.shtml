@@ -61,23 +61,12 @@
 
         <h4>MERG CBUS</h4>
             <ul>
-                <li>Fixed issue with Roster speed-profiling</li>
-                <li><a 
-                href="http://jmri.org/help/en/package/jmri/jmrix/can/cbus/swing/nodeconfig/NodeConfigToolPane.shtml">CBUS 
-                Node Manager</a> provides a Node Table with further Node Configuration tools.</li>
-                <li>Track Current meter avaiable for supported Command Stations via 
-                PanelPro > Tools > Track Current Meter</li>
+                <li></li>
             </ul>
 
         <h4>MQTT</h4>
             <ul>
-                <li>This release has an experimental method for changing the payload
-                    of MqttTurnouts, i.e. to use JSON instead of fixed strings.
-                    See the description at the bottom of the 
-                    <a href="http://jmri.org/help/en/hardware/mqtt/index.shtml#payload">bottom of the MQTT page</a>.
-                    More work is needed on this before it actually sends and receives
-                    JSON.
-                    </li>
+                <li></li>
             </ul>
 
         <h4>MRC</h4>
@@ -267,7 +256,7 @@
 
         <h4>TCS</h4>
             <ul>
-                <li>Add Trim CV to Basic Speed Control pane</li>
+                <li></li>
             </ul>
 	    
 	    <h4>Team Digital</h4>
@@ -330,7 +319,7 @@
    <h3>Internationalization</h3>
         <a id="I18N" name="I18N"></a>
         <ul>
-            <li></li>
+            <li>Petr Šídlo improved the Czech translation</li>
         </ul>
 
     <h3>Layout Editor</h3>
@@ -356,6 +345,11 @@
         <ul>
             <li></li>
         </ul>
+        <h4>CTC Tool</h4>
+            <a id="PE-CTC" name="PE-CTC"></a>
+            <ul>
+                <li></li>
+            </ul>
 
     <h3>Preferences</h3>
         <a id="Preferences" name="Preferences"></a>
@@ -384,7 +378,18 @@
     <h3>Scripting</h3>
         <a id="Scripting" name="Scripting"></a>
         <ul>
-            <li></li>
+            <li><strong>Custom scripts that release throttles may need to be modified.</strong><br>
+            <ul>
+                <li>AutoDispatcher2</li>
+                <li>RobotThrottle2</li>
+                <li>RobotThrottle3</li>
+                <li>RocoCrane</li>
+                <li>Zimo Programmers</li>
+            </ul>
+            <br>
+            Old syntax: <code>self.throttle.release()</code> <br>
+            New syntax assuming no throttle listeners in script: <code>self.throttle.release(None)</code>
+            </li>
         </ul>
 
     <h3>Signals</h3>
@@ -424,12 +429,7 @@
 
 	    <h4>USS CTC Logic</h4>
             <ul>
-                <li>Updated how lock information is 
-                    stored in the 'logging memory'
-                    so that it can be displayed e.g. 
-                    on a panel.  For more info,
-                    see the
-                    <a href="/help/en//html/tools/uss/index.shtml">help page</a></li>
+                <li></li>
             </ul>
 
    <h3>Switchboard Editor</h3>
@@ -440,7 +440,6 @@
 
     <h3>Timetable</h3>
         <a id="Timetable" name="Timetable"></a>
-        <span class="since">since 4.13.4</span>
         <ul>
             <li></li>
         </ul>
@@ -472,6 +471,6 @@
     <h3>Miscellaneous</h3>
         <a id="Misc" name="Misc"></a>
         <ul>
-            <li></li>
+            <li>Add new <code>TestWaitsForever</class> test class to allow end-of-job debug.</li>
         </ul>
 

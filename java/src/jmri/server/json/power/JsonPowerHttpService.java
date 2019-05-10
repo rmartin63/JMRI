@@ -39,7 +39,7 @@ public class JsonPowerHttpService extends JsonHttpService {
 
     @Override
     // Nullable to override inherited NonNull requirement
-    public JsonNode doGet(String type, @Nullable String name, Locale locale) throws JsonException {
+    public JsonNode doGet(String type, @Nullable String name, JsonNode parameters, Locale locale) throws JsonException {
         ObjectNode root = mapper.createObjectNode();
         root.put(TYPE, POWER);
         ObjectNode data = root.putObject(DATA);
@@ -72,6 +72,8 @@ public class JsonPowerHttpService extends JsonHttpService {
             } else {
                 // No PowerManager is defined; just report it as UNKNOWN
                 data.put(STATE, UNKNOWN);
+                data.put(NAME, "");
+                data.put(DEFAULT, false);
             }
         } catch (JmriException e) {
             log.error("Unable to get Power state.", e);
@@ -85,7 +87,7 @@ public class JsonPowerHttpService extends JsonHttpService {
         int state = data.path(STATE).asInt(UNKNOWN);
         if (state != UNKNOWN) {
             try {
-                PowerManager manager = InstanceManager.getDefault(PowerManager.class);
+                PowerManager manager = InstanceManager.getNullableDefault(PowerManager.class);
                 if (!name.isEmpty()) {
                     for (PowerManager pm : InstanceManager.getList(PowerManager.class)) {
                         if (pm.getUserName().equals(name)) {
@@ -93,32 +95,30 @@ public class JsonPowerHttpService extends JsonHttpService {
                         }
                     }
                 }
-                switch (state) {
-                    case OFF:
-                        manager.setPower(PowerManager.OFF);
-                        break;
-                    case ON:
-                        manager.setPower(PowerManager.ON);
-                        break;
-                    case UNKNOWN:
-                        // quietly ignore
-                        break;
-                    default:
-                        throw new JsonException(HttpServletResponse.SC_BAD_REQUEST, Bundle.getMessage(locale, "ErrorUnknownState", POWER, state));
-
+                if (manager != null) {
+                    switch (state) {
+                        case OFF:
+                            manager.setPower(PowerManager.OFF);
+                            break;
+                        case ON:
+                            manager.setPower(PowerManager.ON);
+                            break;
+                        default:
+                            throw new JsonException(HttpServletResponse.SC_BAD_REQUEST, Bundle.getMessage(locale, "ErrorUnknownState", POWER, state));
+                    }
                 }
             } catch (JmriException ex) {
                 throw new JsonException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex);
             }
         }
-        return this.doGet(type, name, locale);
+        return this.doGet(type, name, data, locale);
     }
 
     @Override
-    public ArrayNode doGetList(String type, Locale locale) throws JsonException {
+    public ArrayNode doGetList(String type, JsonNode data, Locale locale) throws JsonException {
         ArrayNode root = this.mapper.createArrayNode();
         for (PowerManager manager : InstanceManager.getList(PowerManager.class)) {
-            root.add(this.doGet(type, manager.getUserName(), locale));
+            root.add(this.doGet(type, manager.getUserName(), data, locale));
         }
         return root;
     }

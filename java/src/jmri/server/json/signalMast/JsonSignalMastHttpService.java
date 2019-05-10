@@ -36,34 +36,31 @@ public class JsonSignalMastHttpService extends JsonNamedBeanHttpService<SignalMa
 
     @Override
     public ObjectNode doGet(SignalMast signalMast, String name, String type, Locale locale) throws JsonException {
-        ObjectNode root = this.getNamedBean(signalMast, name, type, locale);
+        ObjectNode root = this.getNamedBean(signalMast, name, type, locale); // throws if signalMast is null
         ObjectNode data = root.with(DATA);
-        if (signalMast != null) {
-            String aspect = signalMast.getAspect();
-            if (aspect == null) {
-                aspect = ASPECT_UNKNOWN; //if null, set aspect to "Unknown"
-            }
-            data.put(ASPECT, aspect);
-            data.put(LIT, signalMast.getLit());
-            data.put(TOKEN_HELD, signalMast.getHeld());
-            //state is appearance, plus flags for held and dark statuses
-            if ((signalMast.getHeld()) && (signalMast.getAppearanceMap().getSpecificAppearance(jmri.SignalAppearanceMap.HELD) != null)) {
-                data.put(STATE, ASPECT_HELD);
-            } else if ((!signalMast.getLit()) && (signalMast.getAppearanceMap().getSpecificAppearance(jmri.SignalAppearanceMap.DARK) != null)) {
-                data.put(STATE, ASPECT_DARK);
-            } else {
-                data.put(STATE, aspect);
-            }
+        String aspect = signalMast.getAspect();
+        if (aspect == null) {
+            aspect = ASPECT_UNKNOWN; //if null, set aspect to "Unknown"
+        }
+        data.put(ASPECT, aspect);
+        data.put(LIT, signalMast.getLit());
+        data.put(TOKEN_HELD, signalMast.getHeld());
+        // state is appearance, plus flags for held and dark statuses
+        if ((signalMast.getHeld()) && (signalMast.getAppearanceMap().getSpecificAppearance(jmri.SignalAppearanceMap.HELD) != null)) {
+            data.put(STATE, ASPECT_HELD);
+        } else if ((!signalMast.getLit()) && (signalMast.getAppearanceMap().getSpecificAppearance(jmri.SignalAppearanceMap.DARK) != null)) {
+            data.put(STATE, ASPECT_DARK);
+        } else {
+            data.put(STATE, aspect);
         }
         return root;
     }
 
     @Override
-    public JsonNode doPost(String type, String name, JsonNode data, Locale locale) throws JsonException {
-        SignalMast signalMast = this.postNamedBean(getManager().getBeanBySystemName(name), data, name, type, locale);
+    public ObjectNode doPost(SignalMast signalMast, String name, String type, JsonNode data, Locale locale) throws JsonException {
         if (data.path(STATE).isTextual()) {
             String aspect = data.path(STATE).asText();
-            if (aspect.equals("Held")) {
+            if (aspect.equals(ASPECT_HELD)) {
                 signalMast.setHeld(true);
             } else if (signalMast.getValidAspects().contains(aspect)) {
                 if (signalMast.getHeld()) {
@@ -76,7 +73,7 @@ public class JsonSignalMastHttpService extends JsonNamedBeanHttpService<SignalMa
                 throw new JsonException(400, Bundle.getMessage(locale, "ErrorUnknownState", SIGNAL_MAST, aspect));
             }
         }
-        return this.doGet(type, name, locale);
+        return this.doGet(signalMast, name, type, locale);
     }
 
     @Override
