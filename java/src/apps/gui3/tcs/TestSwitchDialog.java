@@ -62,7 +62,6 @@ public class TestSwitchDialog extends JDialog {
 	public static ArrayList <SwitchSegment> switchList = new ArrayList <SwitchSegment>();
 
 	public static LocoNetAPI lnAPI = null;
-	public static LocoNetAPI_STUB lnAPI_S = null;
 
 	public static int refreshedSwId;
 
@@ -182,18 +181,10 @@ public class TestSwitchDialog extends JDialog {
 		if(pSize == null)
 			pSize = new Dimension(DIALOG_WIDTH, LAYOUT_PANEL_HEIGHT); //Panel Size
 
-		//CHANGE #1...
-		if(layoutConnected == true) {
-			//For use with the Layout...
-			if(lnAPI == null) {
-				lnAPI = LocoNetAPI.getInstance();
-			}
-		} else {
-			//For Testing without the Layout...
-			if(lnAPI_S == null) {
-				lnAPI_S = LocoNetAPI_STUB.getInstance();
-			}
-		}
+		
+        if(lnAPI == null) {
+            lnAPI = LocoNetAPI.getInstance();
+        }
 
         pSize = lPanel.getSize();
 

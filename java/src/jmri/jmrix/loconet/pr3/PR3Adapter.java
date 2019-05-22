@@ -38,7 +38,12 @@ public class PR3Adapter extends LocoBufferAdapter {
     }
 
     public static PR3Adapter getInstance() {
-        if(adaptorList.get(0) != null) return adaptorList.get(0);
+        if(adaptorList.size() > 0) {
+            if(adaptorList.get(0) != null) { 
+                return adaptorList.get(0);
+            }
+            else return null;
+        }
         else return null;
     }
     

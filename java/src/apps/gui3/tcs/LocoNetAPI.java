@@ -73,7 +73,7 @@ public class LocoNetAPI implements LocoNetListener {
 	        layoutPr3API = PR3Adapter.getInstance();
 	    }
         
-        if(lnController == null) {
+        if(layoutPr3API != null && lnController == null) {
             memo = layoutPr3API.getSystemConnectionMemo(); 
 			lnController = memo.getLnTrafficController(); 
 			slotManager = memo.getSlotManager();
@@ -84,7 +84,7 @@ public class LocoNetAPI implements LocoNetListener {
     }
 
     private void createTurnoutManager() {
-		if(lnTurnoutMgr == null) {
+		if(layoutPr3API != null && lnTurnoutMgr == null) {
 			mTurnoutNoRetry = false;
 			
 			//System.out.println("LocoNetAPI::createTurnoutManager() Creating TcsTurnoutManager...");
@@ -109,7 +109,9 @@ public class LocoNetAPI implements LocoNetListener {
    		//if(dccAddr == 74) System.out.print("\n\nLocoNetAPI() addSwitch() switchID="+switchID+" dccAddr="+dccAddr+" sysName="+
    		//     sysName+" name="+name+" thrown="+thrown+" lnTurnoutMgr="+lnTurnoutMgr+"\n\n");
    		
-   		sw.turnout = lnTurnoutMgr.createNewTurnout(sysName, name);
+   		if(layoutPr3API != null) {
+   		    sw.turnout = lnTurnoutMgr.createNewTurnout(sysName, name);
+   		}
 
    		//Establish the state of the the layout switch...
    		establishSwitchState(dccAddr, thrown);
@@ -124,7 +126,7 @@ public class LocoNetAPI implements LocoNetListener {
     	TcsTurnout turnout = null;
     	if(sw != null) turnout = sw.getTcsTurnout();
 
-    	if(turnout != null) {
+    	if(layoutPr3API != null && turnout != null) {
     		boolean isThrown = getSwitchIsThrown(dccAddress);
     		//System.out.println("LocoNetAPI  Switchinfo: id="+sw.getSwitchID()+" dccAdr="+sw.getDccAddress()+
     		//        " name="+sw.getName()+" isThrown="+sw.isThrown);
@@ -154,7 +156,7 @@ public class LocoNetAPI implements LocoNetListener {
 		SwitchInfo sw = getSwitchInfo(dccAddress);
     	TcsTurnout turnout = sw.getTcsTurnout();
 
-    	if(turnout != null) {
+    	if(layoutPr3API != null && turnout != null) {
 	    	if(!isThrown) {
 	    		//Just send out a CLOSED state to initially set switch to a known state:
 	    		turnout.sendSwChangeCmdToLayout(Turnout.CLOSED);

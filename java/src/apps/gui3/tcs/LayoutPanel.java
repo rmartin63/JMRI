@@ -51,8 +51,7 @@ public class LayoutPanel extends JPanel {
 	public static ArrayList <SwitchSegment> switchList = new ArrayList <SwitchSegment>();
 
 	public static LocoNetAPI lnAPI = null;
-	public static LocoNetAPI_STUB lnAPI_S = null;
-
+	
 	public static RouteManager rMgr = null; //Route Manager...
 
 	public static int refreshedSwId;
@@ -206,19 +205,9 @@ public class LayoutPanel extends JPanel {
 			pSize = new Dimension(800, 600); //Panel Size
 
 
-
-		//CHANGE #1...
-		if(layoutConnected == true) {
-			//For use with the Layout...
-			if(lnAPI == null) {
-				lnAPI = LocoNetAPI.getInstance();
-			}
-		} else {
-			//For Testing without the Layout...
-			if(lnAPI_S == null) {
-				lnAPI_S = LocoNetAPI_STUB.getInstance();
-			}
-		}
+		if(lnAPI == null) {
+            lnAPI = LocoNetAPI.getInstance();
+        }
 
 		if(rMgr == null) {
 			 rMgr = RouteManager.getInstance();

@@ -160,23 +160,21 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 		String value = System.getenv("TCS_AT_HOME");
 		System.out.println("\n**************\nTCS_AT_HOME="+value+"\n**************\n");
 
-		if(value != null) {
-			if(value.equals("YES") || value.equals("Yes")) {
-				//Disable while at work...
-		        addMainToolBar(toolbarFile);
-		        populateContentPane();
+        addMainToolBar(toolbarFile);
+        
+        if(value != null) {
+            if(value.equals("YES") || value.equals("Yes")) {
+                //Disable while at work...
+                populateContentPane();
+            }
+        }
+        //else setBounds(0, 0, 800, 200);
 
-		        addMainStatusBar();
-		        additionsToToolBar();
-		        frameInstances.add(this);
-		        p = InstanceManager.getDefault(UserPreferencesManager.class);
-		        statusBar();
-			} else {
-				setBounds(0, 0, 800, 200);
-			}
-		} else {
-			setBounds(0, 0, 800, 200);
-		}
+        addMainStatusBar();
+        additionsToToolBar();
+        frameInstances.add(this);
+        p = InstanceManager.getDefault(UserPreferencesManager.class);
+        statusBar();
 
         if (frameInstances.size() > 1) {
             firePropertyChange("closewindow", "setEnabled", true);

@@ -50,7 +50,6 @@ public class SwitchSegment {
 	private JButton                   frogButton;
 	private String                    toolTipText = new String("99 - CLOSED");
     private LocoNetAPI                lnAPI = null;
-    private LocoNetAPI_STUB           lnAPI_S = null;
     private boolean                   isThrown;
     private boolean                   isVisible = true;
     private LayoutPanel               layoutPanel = null;
@@ -63,10 +62,8 @@ public class SwitchSegment {
     	dccAddress = dccAddr;
    		switchID = switchId;
 
-   		//CHANGE #2
    		//Get singleton instance of LocoNetAPI...
-   		if(LayoutPanel.layoutConnected == true) lnAPI = LocoNetAPI.getInstance();
-   		else lnAPI_S = LocoNetAPI_STUB.getInstance();
+   		lnAPI = LocoNetAPI.getInstance();
 
    		isThrown = thrown;
 
@@ -83,20 +80,6 @@ public class SwitchSegment {
 	   		} else {  //Not first time!
 	   			//if(dccAddr == 74) System.out.print("\nSwitchSegment() lnAPI != null Call setSwitch thrown="+thrown+" switchCount="+switchCount+"\n\n");
 	   			lnAPI.setSwitchIsThrown(dccAddr, thrown);
-	   		}
-   		}
-
-		if(lnAPI_S != null) {
-			//NOTE: NOT_SET (-1) = First Time creating this switch instance!
-	   		if(switchId == NOT_SET) {
-	   			//if(dccAddr == 74) System.out.print("\nSwitchSegment() lnAPI_S != null Call addSwitch dccAddr="+dccAddr+" thrown="+thrown+" switchCount="+switchCount+"\n\n");
-	   			lnAPI_S.addSwitch(switchID, dccAddr, sName, thrown);
-
-	   			//Now, Assign a unique ID number to this switch...
-	   			switchID = switchCount++;
-	   		} else {  //Not first time!
-	   			//if(dccAddr == 74) System.out.print("\nSwitchSegment() lnAPI_S != null Call setSwitch thrown="+thrown+" switchCount="+switchCount+"\n\n");
-	   			lnAPI_S.setSwitchIsThrown(dccAddr, thrown);
 	   		}
    		}
 
@@ -160,7 +143,7 @@ public class SwitchSegment {
    			public void actionPerformed(ActionEvent e)
 	        {
    				if(lnAPI != null) System.out.println("SwitchSegment() actionPerformed thrown="+lnAPI.getSwitchIsThrown(dccAddress));
-   				if(lnAPI_S != null) System.out.println("SwitchSegment() actionPerformed thrown="+lnAPI_S.getSwitchIsThrown(dccAddress));
+
    				//Toggle the state of the switch...
    				processChangeState();
 	        }
@@ -261,7 +244,6 @@ public class SwitchSegment {
     						" isXS="+isXOnSpur+" isYS="+isYOnSpur); */
 
     	if(lnAPI != null) isThrown = lnAPI.getSwitchIsThrown(dccAddress);
-    	if(lnAPI_S != null) isThrown = lnAPI_S.getSwitchIsThrown(dccAddress);
 
     	if (isXOnMainLine && isYOnMainLine) {
    			System.out.println("SwitchSegment isSwitchFound - if Clicked on mainLine!!   isThrown="+isThrown);
@@ -303,7 +285,6 @@ public class SwitchSegment {
     }
     public boolean getIsThrown() {
     	if(lnAPI != null) isThrown = lnAPI.getSwitchIsThrown(dccAddress);
-    	if(lnAPI_S != null) isThrown = lnAPI_S.getSwitchIsThrown(dccAddress);
     	return isThrown;
     }
 
@@ -395,15 +376,13 @@ public class SwitchSegment {
 
 
    		if(lnAPI != null) lnAPI.setSwitchIsThrown(dccAddress, isThrown);
-   		if(lnAPI_S != null) lnAPI_S.setSwitchIsThrown(dccAddress, isThrown);
 
 	   	System.out.println("\nSwitchSegment processChangeState Sw dccAddress="+dccAddress+" name="+name+" first isThrown="+first+
 	   			" Last isThrown="+isThrown+" lnAPIThrown now="+lnAPI.getSwitchIsThrown(dccAddress));
 
 	   	//Update the layout switch...
    		if(lnAPI != null) lnAPI.sendDCCSwitchChange(dccAddress);
-   		if(lnAPI_S != null) lnAPI_S.sendDCCSwitchChange(dccAddress);
-
+   		
     	//Redraw GUI Switch State!
     	//draw();
     }
