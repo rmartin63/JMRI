@@ -38,7 +38,7 @@ public class Bundle extends apps.gui3.Bundle {
      * @param key Bundle key to be translated
      * @return Internationalized text
      */
-    static String getMessage(String key) {
+    public static String getMessage(String key) {
         return getBundle().handleGetMessage(key);
     }
 

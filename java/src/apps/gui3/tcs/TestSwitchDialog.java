@@ -125,8 +125,9 @@ public class TestSwitchDialog extends JDialog {
 		setLayout(new FlowLayout());
 
 		String value = System.getenv("TCS_LAYOUT_CONNECTED");
-		if(value.equals("YES") || value.equals("Yes"))
-		layoutConnected = true;
+		if(value != null)
+		    if(value.equals("YES") || value.equals("Yes"))
+		        layoutConnected = true;
 
 		if(lPanel == null) {
 			lPanel = new JPanel() {

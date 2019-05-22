@@ -11,6 +11,9 @@ import jmri.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import apps.gui3.dp3.Bundle;
+import apps.gui3.dp3.DecoderPro3;
+
 
 /**
  * The JMRI application for developing the TCS GUI <P>
@@ -142,14 +145,13 @@ public class TCS extends apps.gui3.Apps3 {
                 prefsAction.actionPerformed(null);
             }
         }
-        //addToActionModel();
 
         Runnable r = new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    DecoderIndexFile.instance();
+                    InstanceManager.getDefault(DecoderIndexFile.class);
                 } catch (Exception ex) {
                     log.error("Error in trying to initialize decoder index file " + ex.toString());
                 }
@@ -157,8 +159,8 @@ public class TCS extends apps.gui3.Apps3 {
         };
         Thread thr = new Thread(r, "initialize decoder index");
         thr.start();
-        //jmri.InstanceManager.tabbedPreferencesInstance().disablePreferenceItem("STARTUP", "apps.PerformFilePanel");
     }
 
     static Logger log = LoggerFactory.getLogger(TCS.class.getName());
+    
 }

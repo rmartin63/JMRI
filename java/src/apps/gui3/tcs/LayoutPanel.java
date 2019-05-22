@@ -171,8 +171,10 @@ public class LayoutPanel extends JPanel {
 		String value = System.getenv("TCS_LAYOUT_CONNECTED");
 		System.out.println("\n**************\nTCS_LAYOUT_CONNECTED="+value+"\n**************\n");
 
-		if(value.equals("YES") || value.equals("Yes"))
-		layoutConnected = true;
+		if(value != null) { 
+		    if(value.equals("YES") || value.equals("Yes"))
+		        layoutConnected = true;
+		}
 
         //MouseListener for finding points for debug and switch placement
         addMouseListener(ml);

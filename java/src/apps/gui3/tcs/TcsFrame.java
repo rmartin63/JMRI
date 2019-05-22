@@ -638,7 +638,9 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 			Component component = (Component) e.getSource();
 	        JFrame frame = (JFrame) SwingUtilities.getRoot(component);
 	        Window win = findWindow(frame);
-	        closeWindow(new WindowEvent(win, WindowEvent.WINDOW_CLOSING));
+	        if(win != null) {
+	            closeWindow(new WindowEvent(win, WindowEvent.WINDOW_CLOSING));
+	        }
     	}
     }
 
@@ -720,12 +722,15 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 
 
     public static Window findWindow(Component c) {
-        if (c == null) {
+        //if (c == null) {
+        if (c == null && frameInstances.size() != 0) {
             return frameInstances.get(0).getFrame();
         } else if (c instanceof Window) {
             return (Window) c;
-        } else {
+        } else if(c != null) {
             return findWindow(c.getParent());
+        } else {
+            return null; 
         }
     }
 
