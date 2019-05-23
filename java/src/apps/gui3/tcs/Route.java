@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 //import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 //************************************************************************************************
@@ -23,21 +27,21 @@ public class Route {
 		RUN, STOP, SUSPEND
 	}
 
-	//02/20  @XmlElement
+	@XmlElement
 	private int routeID;
-	//02/20  @XmlElement
+	@XmlElement
     private String name;
-  //02/20  @XmlElement
+	@XmlElement
     private RouteState state;
-  //02/20  @XmlJavaTypeAdapter(ColorAdapter.class)
-  //02/20  @XmlElement
+	@XmlJavaTypeAdapter(ColorAdapter.class)
+	@XmlElement
     private Color routeColor;
-  //02/20  @XmlElement
+	@XmlElement
     private int numOfTimesAccessed;
-  //02/20  @XmlElement
+	@XmlElement
     private static int idCounter = 0;
 
-  //02/20  @XmlElement
+	@XmlElement
     private final List<RouteSegmentInfo> segments = new ArrayList <>();
 
     public List<RouteSegmentInfo> getSegments() {
@@ -193,15 +197,15 @@ class CustomComparator implements Comparator<Route> {
 //02/20  @XmlAccessorType (XmlAccessType.FIELD)
 class RouteSegmentInfo { //One instance for each segment and each switch.
 
-  //02/20  @XmlElement
+    @XmlElement
 	private boolean       isTrackSegment;
-	//02/20  @XmlElement
+	@XmlElement
 	private int           segmentID;
-	//02/20  @XmlElement
+	@XmlElement
 	private String 		  segmentName;
-	//02/20  @XmlElement
+	@XmlElement
 	private int           switchID;
-	//02/20  @XmlElement
+	@XmlElement
 	private String 		  switchName;
 
 	public RouteSegmentInfo() {
@@ -257,16 +261,16 @@ class RouteSegmentInfo { //One instance for each segment and each switch.
 	}
 }
 
-class ColorAdapter { // 02/20 extends XmlAdapter<String,Color> {
+class ColorAdapter extends XmlAdapter<String,Color> {
 	  public Color unmarshal(String s) {
-		  //System.out.println("ColorAdapter::unmarshal s="+s+" Return Color="+Color.decode(s));
+		System.out.println("ColorAdapter::unmarshal s="+s+" Return Color="+Color.decode(s));
 	    return Color.decode(s);
 	  }
 	  public String marshal(Color c) {
 		  String rgb = Integer.toHexString(c.getRGB());
-		  //String ss = new String("#" + rgb.substring(2, rgb.length()));
-		  //System.out.println("ColorAdapter::marshal Color="+c+" return str="+ss+" toStr="+c.toString()+
-				  //" back to Color="+Color.decode(ss));
+		  String ss = new String("#" + rgb.substring(2, rgb.length()));
+		  System.out.println("ColorAdapter::marshal Color="+c+" return str="+ss+" toStr="+c.toString()+
+				  " back to Color="+Color.decode(ss));
 		return "#" + rgb.substring(2, rgb.length());
 	  }
 	}

@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
-//import javax.xml.bind.JAXBContext;
-//import javax.xml.bind.JAXBContext;
-//import javax.xml.bind.JAXBException;
-//import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -208,51 +209,48 @@ public class RouteManager {
     	//First, sort List by Route Name, then Save to disk!
     	routes.sort(RouteSortedOrder.A_Z);
 
-    	//System.out.println("\nRouteManager.saveRoutes CALLED!!");
-    	//try {
+    	System.out.println("\nRouteManager.saveRoutes CALLED!!");
+    	try {
     		// create JAXB context; provide it with a list of classes to search for annotations
     	    
-    	    //02/20/19 comment out to compile
-    		/*JAXBContext jaxbContext = JAXBContext.newInstance(RoutesList.class, Route.class, RouteSegmentInfo.class);
+    		JAXBContext jaxbContext = JAXBContext.newInstance(RoutesList.class, Route.class, RouteSegmentInfo.class);
     		//...and initializing Marshaller
     		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
     		// for getting nice formatted output
     		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-*/
+
     		//specify the location and name of xml file to be created
     		File XMLfile = new File("c:/workspace/RoutesList.xml");
-
-    		//Comment out 02/20/19
-    		/*
+   		
     		// Writing to XML file
     		jaxbMarshaller.marshal(routes, XMLfile);
 
     		// Writing to console
     		jaxbMarshaller.marshal(routes, System.out);
-*/
- /*   	} catch (JAXBException e) {
+
+    	} catch (JAXBException e) {
     		// some exception occurred
     		e.printStackTrace();
-    	}*/
+    	}
 
     }
 
     public void readInRoutes() {
-    	//System.out.println("\nRouteManager.readInRoutes CALLED!!");
-//02/20    	try {
-    	    //Comment out on 02/20/19
-    	    /*
+    	    System.out.println("\nRouteManager.readInRoutes CALLED!!");
+    	try {
+
+    	   
     		// create JAXB context; provide it with a list of classes to search for annotations
     		JAXBContext jaxbContext = JAXBContext.newInstance(RoutesList.class, Route.class, RouteSegmentInfo.class);
     		//...and initializing Unmarshaller
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-*/
+
             //specify the name of xml file to be read in
     		File XMLfile = new File("c:/workspace/RoutesList.xml");
 
     		if(XMLfile.exists()) {
-	//02/20    		routes = (RoutesList) jaxbUnmarshaller.unmarshal(XMLfile);
+    		    routes = (RoutesList) jaxbUnmarshaller.unmarshal(XMLfile);
 
 	        	//Next, sort List by Route Name...
 	        	routes.sort(RouteSortedOrder.A_Z);
@@ -260,18 +258,17 @@ public class RouteManager {
 	            List<Route> routeSegs = routes.getRoutes();
 
 	            //Debug:  Print out the data that is read in...
-	            /*
+	            
 	            for(int i = 0; i < routes.getRoutes().size(); i++){
 	    			System.out.println(routes.getRoutes().get(i).print());
-	        	}*/
+	        	}
     		} else {
     			System.out.println("readInRoutes: Routes XML File not found!");
 
     		}
-/* 02/20
         } catch (JAXBException e) {
             e.printStackTrace();
-        } */
+        } 
     }
 }
 
