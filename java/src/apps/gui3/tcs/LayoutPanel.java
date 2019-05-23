@@ -263,40 +263,49 @@ public class LayoutPanel extends JPanel {
 
 		} else {
 
-	        //Draw Main West (by pass-thru bridge)...
-	        drawWest.draw();
-
-	        //Draw Main South (by docks)...
-	        drawSouth.draw();
-
-	        //Draw Main North (Mainlines by coal tracks)...
-	        drawNorth.draw();
-
-	        //Draw Main East (mainlines under timber mountain)...
-	        drawEast.draw();
-
-	        //Draw Main Mid (mainline by Trestle)...
-	        drawMid.draw();
-
-	        //Draw Main Mid Upper (Upper Level Tracks)...
-	        drawMidUpper.draw();
-
-	        //Draw Yard...
-	        drawYard.draw();
-
-	        //Draw Loco Yard...
-	        drawLocoYard.draw();
-
-
-	        //Test code to print out Segments and Switches!
-	        //printTestDebug();
-
-	        //Draw all trains...
-	        for(int i = 0; i < ThrottlePanel.availableTrains.size(); i++){
-	        	Train train = ThrottlePanel.availableTrains.get(i);
-	        	if(train != null)
-	        		if(train.getThrottleID() != ThrottlePanel.NOT_SET)
-	        			train.draw();
+		    String value = System.getenv("TCS_AT_HOME");
+	        System.out.println("\n**************\nTCS_AT_HOME="+value+"\n**************\n");
+	        
+	        //Disable while at work...
+	        
+	        if(value != null) {
+	            if(value.equals("YES") || value.equals("Yes")) {
+        	        //Draw Main West (by pass-thru bridge)...
+        	        drawWest.draw();
+        
+        	        //Draw Main South (by docks)...
+        	        drawSouth.draw();
+        
+        	        //Draw Main North (Mainlines by coal tracks)...
+        	        drawNorth.draw();
+        
+        	        //Draw Main East (mainlines under timber mountain)...
+        	        drawEast.draw();
+        
+        	        //Draw Main Mid (mainline by Trestle)...
+        	        drawMid.draw();
+        
+        	        //Draw Main Mid Upper (Upper Level Tracks)...
+        	        drawMidUpper.draw();
+        
+        	        //Draw Yard...
+        	        drawYard.draw();
+        
+        	        //Draw Loco Yard...
+        	        drawLocoYard.draw();
+        
+        
+        	        //Test code to print out Segments and Switches!
+        	        //printTestDebug();
+        
+        	        //Draw all trains...
+        	        for(int i = 0; i < ThrottlePanel.availableTrains.size(); i++){
+        	        	Train train = ThrottlePanel.availableTrains.get(i);
+        	        	if(train != null)
+        	        		if(train.getThrottleID() != ThrottlePanel.NOT_SET)
+        	        			train.draw();
+        	        }
+	            }
 	        }
 		}
 

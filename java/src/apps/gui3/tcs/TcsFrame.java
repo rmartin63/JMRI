@@ -157,18 +157,9 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 		defineMenu();
 		setJMenuBar(menuBar);
 
-		String value = System.getenv("TCS_AT_HOME");
-		System.out.println("\n**************\nTCS_AT_HOME="+value+"\n**************\n");
-
         addMainToolBar(toolbarFile);
         
-        if(value != null) {
-            if(value.equals("YES") || value.equals("Yes")) {
-                //Disable while at work...
-                populateContentPane();
-            }
-        }
-        //else setBounds(0, 0, 800, 200);
+        populateContentPane();
 
         addMainStatusBar();
         additionsToToolBar();
