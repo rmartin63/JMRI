@@ -273,7 +273,7 @@ public class LayoutPanelDrawYard {
 
 		//****************  Yard-SW2  ***
 		if(LayoutPanel.getSwitch("Yard-SW2") == null) {
-			boolean thrown = LayoutPanel.refreshSwitchList("Yard-SW2", false);
+			boolean thrown = LayoutPanel.refreshSwitchList("Yard-SW2", true);
 	        int slY = northTopLineY+20;
 	        int slX = LayoutPanel.getXOnLine(northTopLineLeftX, northTopLineY, yardBottomLine1RightX, yardBottomLine1Y, slY);
 	        //pt1 = Frog pt2 = ML pt3 = Spur

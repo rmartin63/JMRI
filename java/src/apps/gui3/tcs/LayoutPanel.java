@@ -40,6 +40,8 @@ public class LayoutPanel extends JPanel {
 	public static Graphics2D g2d;
 
 	public static boolean layoutConnected = false;
+	public static String envVar_TCS_LAYOUT_CONNECTED = null;
+	public static String envVar_TCS_AT_HOME = null;
 
 	final public static Color defaultLayoutDrawColor = new Color(156,215,245); //Default LayoutPanel Draw Color
 
@@ -167,13 +169,17 @@ public class LayoutPanel extends JPanel {
         setPreferredSize(panelD);
         setLayout(null);
 
-		String value = System.getenv("TCS_LAYOUT_CONNECTED");
-		System.out.println("\n**************\nTCS_LAYOUT_CONNECTED="+value+"\n**************\n");
+        envVar_TCS_LAYOUT_CONNECTED = System.getenv("TCS_LAYOUT_CONNECTED");
+		System.out.println("\n**************\nTCS_LAYOUT_CONNECTED="+envVar_TCS_LAYOUT_CONNECTED+
+		        "\n**************\n");
 
-		if(value != null) { 
-		    if(value.equals("YES") || value.equals("Yes"))
+		if(envVar_TCS_LAYOUT_CONNECTED != null) { 
+		    if(envVar_TCS_LAYOUT_CONNECTED.equals("YES") || envVar_TCS_LAYOUT_CONNECTED.equals("Yes"))
 		        layoutConnected = true;
 		}
+		
+		envVar_TCS_AT_HOME = System.getenv("TCS_AT_HOME");
+        System.out.println("\n**************\nTCS_AT_HOME="+envVar_TCS_AT_HOME+"\n**************\n");
 
         //MouseListener for finding points for debug and switch placement
         addMouseListener(ml);
@@ -263,13 +269,12 @@ public class LayoutPanel extends JPanel {
 
 		} else {
 
-		    String value = System.getenv("TCS_AT_HOME");
-	        System.out.println("\n**************\nTCS_AT_HOME="+value+"\n**************\n");
+
 	        
 	        //Disable while at work...
 	        
-	        if(value != null) {
-	            if(value.equals("YES") || value.equals("Yes")) {
+	        if(envVar_TCS_AT_HOME != null) {
+	            if(envVar_TCS_AT_HOME.equals("YES") || envVar_TCS_AT_HOME.equals("Yes")) {
         	        //Draw Main West (by pass-thru bridge)...
         	        drawWest.draw();
         
