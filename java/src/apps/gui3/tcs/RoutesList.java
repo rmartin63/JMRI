@@ -4,10 +4,10 @@ package apps.gui3.tcs;
 import java.util.ArrayList;
 import java.util.List;
 //import javax.xml.bind.JAXBContext;
-//import javax.xml.bind.annotation.XmlAccessType;
-//import javax.xml.bind.annotation.XmlAccessorType;
-//import javax.xml.bind.annotation.XmlElement;
-//import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 //import javax.xml.bind.annotation.XmlElement;
 //import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,8 +19,8 @@ import java.util.List;
 //
 //************************************************************************************************
 //************************************************************************************************
-//@XmlRootElement(name = "routesList")
-//@XmlAccessorType (XmlAccessType.FIELD)
+@XmlRootElement(name = "routesList")
+@XmlAccessorType (XmlAccessType.FIELD)
 public class RoutesList {
 
 	public enum RouteSortedOrder {
@@ -30,7 +30,7 @@ public class RoutesList {
 
 	private static RoutesList _instance = null;  //A singleton class!
 
-	//@XmlElement(name="route")
+	@XmlElement(name="route")
     private List<Route> rList = new ArrayList <>();
 
     public List<Route> getRoutes() {

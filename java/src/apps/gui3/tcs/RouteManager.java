@@ -9,7 +9,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -221,7 +220,7 @@ public class RouteManager {
     		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
     		//specify the location and name of xml file to be created
-    		File XMLfile = new File("c:/workspace/RoutesList.xml");
+    		File XMLfile = new File("c:/Users/rem63/JMRI/RoutesList.xml");
    		
     		// Writing to XML file
     		jaxbMarshaller.marshal(routes, XMLfile);
@@ -247,7 +246,7 @@ public class RouteManager {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
             //specify the name of xml file to be read in
-    		File XMLfile = new File("c:/workspace/RoutesList.xml");
+    		File XMLfile = new File("c:/Users/rem63/JMRI/RoutesList.xml");
 
     		if(XMLfile.exists()) {
     		    routes = (RoutesList) jaxbUnmarshaller.unmarshal(XMLfile);

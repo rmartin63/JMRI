@@ -180,7 +180,7 @@ public class LayoutPanelDrawEast {
 		bottomHelixHorizontalFrogX = eastHelixBotSidHorLfX + Math.abs(tempX)/2;
 		bottomHelixHorizontalFrogY = eastHelixBotSidHorY;
 		eastBlueLineSpurRtX = bottomHelixHorizontalFrogX-20;
-	    eastBlueLineSpurRtY = bottomHelixHorizontalFrogY+20;
+	    eastBlueLineSpurRtY = bottomHelixHorizontalFrogY+48;//20;
 	    eastBlueLineSpurLfX = eastBlueLineSpurRtX-265;
 	    eastBlueLineSpurLfY = eastBlueLineSpurRtY;
 
@@ -280,7 +280,7 @@ public class LayoutPanelDrawEast {
 	    //Draw East-Far Right-1 Vert Top Angle To North Mid ML-Part B...
 	    int y1 = northRtBotCoalSpurFrogY+40;//30;
 	    int midFarRtVertX = eastNearLineX-10;
-	    int x1 = midFarRtVertX + ((eastHelixLfSidVertX - midFarRtVertX)/2);
+	    int x1 = midFarRtVertX + ((eastHelixLfSidVertX - midFarRtVertX)/2+10);
 
 	    //int x1 = LayoutPanel.getXOnLine(northMidLineRightX, northMidLineY, eastMidLineX, eastMidFarRight1VertTopAngleBotY, y1);
         if(LayoutPanel.layoutList.getSegment("East-Far Right-1 Vert Top Angle To North Mid ML-B") == null) {
@@ -312,9 +312,9 @@ public class LayoutPanelDrawEast {
     	if(LayoutPanel.getSwitch("East-SW0") == null) {
 		    boolean thrown = LayoutPanel.refreshSwitchList("East-SW0", false);
 
-		    int mlY = northRtBotCoalSpurFrogY+20;//30;
-		    //int mlX = LayoutPanel.getXOnLine(northRtBotCoalSpurFrogX, northRtBotCoalSpurFrogY, x1, y1, mlY);
-		    int mlX = x1;
+		    int mlY = northRtBotCoalSpurFrogY+25;
+		    int mlX = LayoutPanel.getXOnLine(northRtBotCoalSpurFrogX, northRtBotCoalSpurFrogY, x1, y1, mlY);
+		    //int mlX = x1;
 		    //pt1 = Frog pt2 = ML pt3 = Spur
 		    int mlSeg = LayoutPanel.layoutList.getSegment("East-Far Right-1 Vert Top Angle To North Mid ML-A").getSegmentID();
 		    int slSeg = LayoutPanel.layoutList.getSegment("East-Right Bottom Coal Siding-A").getSegmentID();
@@ -377,7 +377,7 @@ public class LayoutPanelDrawEast {
 	    y1 = northRtBotCoalSpurFrogY+40;//30;
 	    //x1 = LayoutPanel.getXOnLine(northMidLineRightX, northMidLineY, eastMidLineX, eastMidFarRight1VertTopAngleBotY, y1);
 	    /*int*/ midFarRtVertX = eastNearLineX-10;
-	    x1 = midFarRtVertX + ((eastHelixLfSidVertX - midFarRtVertX)/2);
+	    x1 = midFarRtVertX + ((eastHelixLfSidVertX - midFarRtVertX)/2+10); //new
 	    int x2 = x1;
 	    int y2 = (int)(LayoutPanel.pSize.getHeight()/2); //y1 + 280;
 
