@@ -246,14 +246,14 @@ public class SwitchSegment {
     	if(lnAPI != null) isThrown = lnAPI.getSwitchIsThrown(dccAddress);
 
     	if (isXOnMainLine && isYOnMainLine) {
-   			System.out.println("SwitchSegment isSwitchFound - if Clicked on mainLine!!   isThrown="+isThrown);
+   			//System.out.println("SwitchSegment isSwitchFound - if Clicked on mainLine!!   isThrown="+isThrown);
    			if(isThrown) {
    				if(frogButton != null) frogButton.doClick();
    				//processChangeState();
    			}
    			return true;
    		} else  if (isXOnSpur && isYOnSpur) {
-   			System.out.println("SwitchSegment isSwitchFound - if Clicked on Spur!!  isThrown="+isThrown);
+   			//System.out.println("SwitchSegment isSwitchFound - if Clicked on Spur!!  isThrown="+isThrown);
    			if(!isThrown) {
    				if(frogButton != null) frogButton.doClick();
    				//processChangeState();

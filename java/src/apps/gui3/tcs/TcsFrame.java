@@ -73,14 +73,15 @@ public class TcsFrame extends jmri.util.JmriJFrame {
     protected JmriAbstractAction newWindowAction;
 
 	//Private Variables
-	private JPanel       	contentPane;
-	private Dimension    	contentPaneSize;
-	private LayoutPanel  	layoutPanel;
-	private DashboardPanel	dashboardPanel;
-	private JMenuBar 		menuBar;
-	private final JPanel          statusBar = new JPanel();
-    private JToolBar        toolBar = new JToolBar();
-    //private JMenu           deleteRouteMenu;
+	private JPanel       	         contentPane;
+	private Dimension    	         contentPaneSize;
+	private LayoutPanel  	         layoutPanel = null;
+	private LayoutPanelNewFormat     layoutPanelNewFormat = null;
+	private DashboardPanel	         dashboardPanel = null;
+	private JMenuBar 		         menuBar;
+	private final JPanel             statusBar = new JPanel();
+    private JToolBar                 toolBar = new JToolBar();
+    //private JMenu                  deleteRouteMenu;
 
     private final RouteCreateDialog   routeCreateDialog;
     private final RouteEditDialog     routeEditDialog;
@@ -159,12 +160,15 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 
         addMainToolBar(toolbarFile);
         
-        populateContentPane();
+        populateContentPaneOrigFormat();
+        //populateContentPaneNewFormat();
 
         addMainStatusBar();
         additionsToToolBar();
+        
         frameInstances.add(this);
         p = InstanceManager.getDefault(UserPreferencesManager.class);
+        
         statusBar();
 
         if (frameInstances.size() > 1) {
@@ -191,22 +195,72 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 	}
 
-	private void populateContentPane() {
+	private void populateContentPaneOrigFormat() {
+	    
+	    //Remove Previous Contents...
+	    if(layoutPanelNewFormat !=null) {
+	        layoutPanelNewFormat.setVisible(false);
+	        contentPane.remove(layoutPanelNewFormat);
+	        layoutPanelNewFormat = null;
+	        
+	        remove(statusBar);
+	        
+	        contentPane.revalidate();
+	        contentPane.repaint();
+	    }
 
-		//Define First Box - JPanel for Layout Panel...
-		layoutPanel = LayoutPanel.getInstance();
-		contentPane.add(layoutPanel);
-		layoutPanel.setVisible(true);
-
-		System.out.println("\n**************\npopulateContentPane...\n**************\n");
-    	//JOptionPane.showMessageDialog(null, "displayPanelSize Width= " + displayPanelSize.getWidth() + " height= " + displayPanelSize.getHeight());
-
-		//Add Second Box - JPanel for bottom dashboard controls...
-		dashboardPanel = new DashboardPanel();
-		//dashboardPanel.setBackground(Color.darkGray);
-		contentPane.add(dashboardPanel);
-		dashboardPanel.setVisible(true);
+        if(layoutPanel == null) {
+    		//Define First Box - JPanel for Layout Panel...
+    		layoutPanel = LayoutPanel.getInstance();
+    		contentPane.add(layoutPanel);
+    		layoutPanel.setVisible(true);
+    
+    		//System.out.println("\n**************\npopulateContentPaneOrigFormat...\n**************\n");
+        	//JOptionPane.showMessageDialog(null, "displayPanelSize Width= " + displayPanelSize.getWidth() + " height= " + displayPanelSize.getHeight());
+    
+    		//Add Second Box - JPanel for bottom dashboard controls...
+    		dashboardPanel = new DashboardPanel();
+    		//dashboardPanel.setBackground(Color.darkGray);
+    		contentPane.add(dashboardPanel);
+    		dashboardPanel.setVisible(true);
+    		
+    		add(statusBar, BorderLayout.SOUTH);
+        }
     }
+	
+	private void populateContentPaneNewFormat() {
+	    
+	    //Remove Previous Contents...
+	    if(layoutPanel != null) {
+	        layoutPanel.setVisible(false);
+	        contentPane.remove(layoutPanel);
+	        layoutPanel = null;
+	    }
+	        
+	    if(dashboardPanel != null) {
+	        dashboardPanel.setVisible(false);
+	        contentPane.remove(dashboardPanel);
+	        dashboardPanel = null;
+	    }
+	    
+        remove(statusBar);
+        
+        contentPane.revalidate();
+        contentPane.repaint();
+   
+	    if(layoutPanelNewFormat == null) {
+            //Define Layout Panel for New Format...
+            layoutPanelNewFormat = LayoutPanelNewFormat.getInstance();
+            contentPane.add(layoutPanelNewFormat);
+            layoutPanelNewFormat.setVisible(true);
+            
+            //System.out.println("\n**************\npopulateContentPaneNewFormat...\n**************\n");
+            //JOptionPane.showMessageDialog(null, "displayPanelSize Width= " + displayPanelSize.getWidth() + " height= " + displayPanelSize.getHeight());
+	    }
+	    repaint();
+	    add(statusBar, BorderLayout.SOUTH);
+	}
+
 
     /*=============== Getters and Setters for core properties ===============*/
     /**
@@ -602,7 +656,20 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 */
     	JMenu mnSignals = new JMenu("Signals");
     	menuBar.add(mnSignals);
+    	
+    	JMenu mnFormat= new JMenu("Format");
+        menuBar.add(mnFormat);
 
+        JMenuItem mntmOrigFormat = new JMenuItem("Original Format");
+        mntmOrigFormat.setHorizontalAlignment(SwingConstants.LEFT);
+        mnFormat.add(mntmOrigFormat);
+        mntmOrigFormat.addActionListener(new FormatItemListener());
+  
+        JMenuItem mntmNewFormat = new JMenuItem("New Format");
+        mntmNewFormat.setHorizontalAlignment(SwingConstants.LEFT);
+        mnFormat.add(mntmNewFormat);
+        mntmNewFormat.addActionListener(new FormatItemListener());
+        
         getMenu().add(new WindowMenu(this));
 
         helpMenu(menuBar, this);
@@ -615,6 +682,7 @@ public class TcsFrame extends jmri.util.JmriJFrame {
     	mnRoutes.addMouseListener(ml);
     	//deleteRouteMenu.addMouseListener(ml);
     	mnSignals.addMouseListener(ml);
+    	mnFormat.addMouseListener(ml);
     	//mnWindow.addMouseListener(ml);
 
     }// End of defineMenu
@@ -650,64 +718,77 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 		}
 	}
 
-
-
     //Class to process Route Menu Items Button Presses...
-	class RouteItemListener implements ActionListener {
+    class RouteItemListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if("Create Route...".equals(e.getActionCommand())){
+                //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+
+                //Turn off all Throttles
+                if(dashboardPanel != null)
+                    dashboardPanel.powerThrottlesDown();
+
+                //Manage dialog...
+                routeCreateDialog.openDialog();
+            }
+            if("Run / Stop".equals(e.getActionCommand())){
+                JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+            }
+            //if("Suspend".equals(e.getActionCommand())){
+            //    JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+            //}
+            //if("Resume".equals(e.getActionCommand())){
+            //    JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+            //}
+            if("Edit Route...".equals(e.getActionCommand())){
+                //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+
+                //Turn off all Throttles
+                if(dashboardPanel != null)
+                    dashboardPanel.powerThrottlesDown();
+
+                //Manage dialog...
+                routeEditDialog.openDialog();
+            }
+
+            if("Route Mapper...".equals(e.getActionCommand())){
+                //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+
+                //Turn off all Throttles
+                if(dashboardPanel != null)
+                    dashboardPanel.powerThrottlesDown();
+
+                //Manage dialog...
+                routeMapperDialog.openDialog();
+
+            }
+            /*
+            if("Delete ALL Route".equals(e.getActionCommand())){
+                //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
+                RouteManager rMgr = RouteManager.getInstance();
+                rMgr.deleteAllRoutes();
+            }
+            */
+        }
+    }
+
+
+    //Class to process Format Menu Items Button Presses...
+	class FormatItemListener implements ActionListener {
 		@Override
         public void actionPerformed(ActionEvent e) {
-			if("Create Route...".equals(e.getActionCommand())){
+			if("Original Format".equals(e.getActionCommand())){
+			    populateContentPaneOrigFormat();
 	            //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
 
-				//Turn off all Throttles
-				if(dashboardPanel != null)
-					dashboardPanel.powerThrottlesDown();
-
-				//Manage dialog...
-	            routeCreateDialog.openDialog();
 	        }
-	        if("Run / Stop".equals(e.getActionCommand())){
-	            JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-	        }
-	        //if("Suspend".equals(e.getActionCommand())){
-	        //    JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-	        //}
-	        //if("Resume".equals(e.getActionCommand())){
-	        //    JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-	        //}
-	        if("Edit Route...".equals(e.getActionCommand())){
+	        if("New Format".equals(e.getActionCommand())){
+	            populateContentPaneNewFormat();
 	            //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-
-	        	//Turn off all Throttles
-	        	if(dashboardPanel != null)
-	        		dashboardPanel.powerThrottlesDown();
-
-	        	//Manage dialog...
-	            routeEditDialog.openDialog();
 	        }
-
-	        if("Route Mapper...".equals(e.getActionCommand())){
-	            //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-
-	        	//Turn off all Throttles
-	        	if(dashboardPanel != null)
-	        		dashboardPanel.powerThrottlesDown();
-
-	        	//Manage dialog...
-				routeMapperDialog.openDialog();
-
-	        }
-	        /*
-	        if("Delete ALL Route".equals(e.getActionCommand())){
-	            //JOptionPane.showMessageDialog(null, "Selected Item: " + e.getActionCommand());
-	        	RouteManager rMgr = RouteManager.getInstance();
-	        	rMgr.deleteAllRoutes();
-	        }
-	        */
 		}
 	}
-
-
 
 
     public static Window findWindow(Component c) {

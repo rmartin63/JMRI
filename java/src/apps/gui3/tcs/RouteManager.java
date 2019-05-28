@@ -257,10 +257,9 @@ public class RouteManager {
 	            List<Route> routeSegs = routes.getRoutes();
 
 	            //Debug:  Print out the data that is read in...
-	            
-	            for(int i = 0; i < routes.getRoutes().size(); i++){
-	    			System.out.println(routes.getRoutes().get(i).print());
-	        	}
+	            //for(int i = 0; i < routes.getRoutes().size(); i++){
+	    		//	System.out.println(routes.getRoutes().get(i).print());
+	        	//}
     		} else {
     			System.out.println("readInRoutes: Routes XML File not found!");
 
