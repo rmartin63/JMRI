@@ -208,7 +208,9 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 	        contentPane.revalidate();
 	        contentPane.repaint();
 	    }
-
+	    
+	    add(toolBar, BorderLayout.NORTH);
+	    
         if(layoutPanel == null) {
     		//Define First Box - JPanel for Layout Panel...
     		layoutPanel = LayoutPanel.getInstance();
@@ -243,6 +245,7 @@ public class TcsFrame extends jmri.util.JmriJFrame {
 	        dashboardPanel = null;
 	    }
 	    
+	    remove(toolBar);
         remove(statusBar);
         
         contentPane.revalidate();
@@ -258,7 +261,7 @@ public class TcsFrame extends jmri.util.JmriJFrame {
             //JOptionPane.showMessageDialog(null, "displayPanelSize Width= " + displayPanelSize.getWidth() + " height= " + displayPanelSize.getHeight());
 	    }
 	    repaint();
-	    add(statusBar, BorderLayout.SOUTH);
+	    //add(statusBar, BorderLayout.SOUTH);
 	}
 
 

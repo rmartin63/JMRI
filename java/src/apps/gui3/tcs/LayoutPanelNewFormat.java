@@ -5,11 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -227,6 +226,67 @@ public class LayoutPanelNewFormat extends JPanel {
        	} else {
        		hasPanelSizeChanged = false;
        	}
+       	
+       	//Draw the Top Cab Dock...
+       	//JScrollPane dock = new JScrollPane(component);
+       	//setPreferredSize(new Dimension(pSize.width, 80));
+       	//add(dock, BorderLayout.CENTER);
+       	
+       	//Draw the Left Power Dock...
+       	
+       	//Draw the Rounded Bench Sections...
+       	int NUM_BENCH_SECTIONS = 7;
+       	ArrayList <RoundRectangle2D.Double> bench = new ArrayList <RoundRectangle2D.Double>();
+       	
+        int red   = 147;
+        int green = 194;
+        int blue  = 255;
+        Color benchBlue = new Color(red,green,blue);
+        g2d.setColor(benchBlue);
+        
+        int benchSpacing = 15;
+        
+        //North Bench...
+        int benchHeight = 170;
+       	bench.add(new RoundRectangle2D.Double(benchSpacing, 80, pSize.width-40, benchHeight, 50, 50));
+       	
+       	//Middle & East Bench...
+       	bench.add(new RoundRectangle2D.Double(pSize.width/2, 80+170+benchSpacing, pSize.width/2-20, 355, 50, 50));   
+       	
+       	//South Bench...
+       	int southLeftX = 170;
+       	int southBenchHeight = benchHeight;
+       	bench.add(new RoundRectangle2D.Double(southLeftX, pSize.height-180, pSize.width/2+100, southBenchHeight, 50, 50));
+
+       	//South - East Bench...
+        int southRightX = southLeftX + (pSize.width/2+100);
+        int southEastWidth = pSize.width-(southRightX+benchSpacing);
+        int southTopY = pSize.height-180;
+       	bench.add(new RoundRectangle2D.Double(southRightX+benchSpacing, southTopY, 
+       	            southEastWidth-benchSpacing, southBenchHeight, 50, 50));
+       	
+        //West Bench...
+       	int westTopY = 80+170+benchSpacing;
+       	int westBottomY = (pSize.height-180-benchSpacing) - westTopY;
+       	int westWidth = 70;
+        bench.add(new RoundRectangle2D.Double(southLeftX, westTopY, westWidth, westBottomY, 50, 50));
+        
+        //Loco Bench...
+        int locoLeftX = southLeftX+westWidth+benchSpacing;
+        int locoRightX = (pSize.width/2-benchSpacing) - locoLeftX;
+        int locoBenchHeight = benchHeight;
+        bench.add(new RoundRectangle2D.Double(locoLeftX, westTopY, locoRightX, locoBenchHeight, 50, 50)); 
+        
+        //Logging Spur Bench...
+        int logSpurLeftY = westTopY + locoBenchHeight + benchSpacing;
+        int logSpurBenchHeight = southTopY-logSpurLeftY-benchSpacing;
+        bench.add(new RoundRectangle2D.Double(locoLeftX, logSpurLeftY, locoRightX, logSpurBenchHeight, 50, 50));       
+
+        for(int i = 0; i < bench.size(); i++) {
+            g2d.draw(bench.get(i));
+            g2d.fill(bench.get(i));
+        }
+       	
 /*
 		//Create the draw objects, if needed...
        	if(drawWest == null) drawWest = LayoutPanelDrawWest.getInstance();
